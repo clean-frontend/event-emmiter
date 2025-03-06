@@ -1,4 +1,23 @@
+
 import "./style.css";
+import {EventEmmiter} from './event-emmiter'
+
+const eventEmmiter = new EventEmmiter();
+
+eventEmmiter.on('click', (data: {name: string, value: number}) => {
+
+  console.log(data, '1')
+})
+
+eventEmmiter.on('click', (data: {name: string, value: number}) => {
+
+  console.log(data, '2')
+})
+
+
+eventEmmiter.emit('click', {name: 'John'})
+eventEmmiter.emit('click', {name: 'John'})
+eventEmmiter.emit('click', {name: 'John'})
 
 type TodoItem = {
   id: string;
@@ -10,7 +29,13 @@ type Sort = {
   text: "ask" | "desc" | "none";
 };
 
-class Store {
+
+const eventBus: EventEmmiter<{
+  "todoList:changed": void,
+  "sort:changed": void
+}> = new EventEmmiter();
+
+class Store  {
   public todoList: TodoItem[] = [];
   public sort: Sort = {
     text: "none",
@@ -36,22 +61,19 @@ class Store {
       completed: false,
     });
 
-    counterView.renderCounter();
-    todoView.renderTodoList();
+    eventBus.emit('todoList:changed')
   }
 
   removeTodo(id: string) {
     this.todoList = this.todoList.filter((todo) => todo.id !== id);
 
-    counterView.renderCounter();
-    todoView.renderTodoList();
+    eventBus.emit('todoList:changed')
   }
 
   updateSort(sort: Sort) {
     this.sort = sort;
 
-    counterView.renderCounter();
-    todoView.renderTodoList();
+    eventBus.emit('sort:changed')
   }
 }
 
@@ -60,6 +82,10 @@ const store = new Store();
 class CounterView {
   constructor() {
     this.renderCounter();
+
+    eventBus.on('todoList:changed', () => {
+      this.renderCounter();
+    })
   }
   renderCounter() {
     const counterContainer = document.getElementById("counter")!;
@@ -67,7 +93,7 @@ class CounterView {
     counterContainer.innerHTML = `count is ${store.todoList.length}`;
   }
 }
-const counterView = new CounterView();
+new CounterView();
 
 class TodoView {
   private todoContainer: HTMLDivElement;
@@ -99,6 +125,13 @@ class TodoView {
         store.removeTodo(id);
       }
     });
+
+    eventBus.on('todoList:changed', () => {
+      this.renderTodoList()
+    })
+    eventBus.on('sort:changed', () => {
+      this.renderTodoList()
+    })
   }
 
   renderTodoList() {
@@ -114,7 +147,7 @@ class TodoView {
     todoListContainer.innerHTML = store.sortedTodos.map(renderTodo).join("\n");
   }
 }
-const todoView = new TodoView();
+new TodoView();
 
 class SortView {
   private sortContainer: HTMLDivElement;
