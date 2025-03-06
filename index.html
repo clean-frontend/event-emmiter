@@ -5,60 +5,27 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        max-width: 500px;
-        margin: 20px auto;
-        padding: 20px;
-      }
-      #todoInput {
-        width: 70%;
-        padding: 10px;
-        font-size: 16px;
-      }
-      #addButton {
-        padding: 10px 20px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-      #todoList {
-        list-style-type: none;
-        padding: 0;
-      }
-      .todoItem {
-        display: flex;
-        align-items: center;
-        margin: 10px 0;
-        padding: 10px;
-        background-color: #f9f9f9;
-        border-radius: 5px;
-      }
-      .todoItem.completed {
-        background-color: #e0e0e0;
-        text-decoration: line-through;
-      }
-      .deleteBtn {
-        margin-left: auto;
-        background-color: #ff4444;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 3px;
-        cursor: pointer;
-      }
-    </style>
+    <style></style>
   </head>
   <body>
     <h1>Todo List</h1>
-    <div>
-      <input type="text" id="todoInput" placeholder="Enter a new task" />
-      <button id="addButton" onclick="addTodo()">Add</button>
-    </div>
-    <ul id="todoList"></ul>
 
-    <script type="module" src="/src/main.js"></script>
+    <div class="todo-list">
+      <div>
+        <input type="text" id="todoInput" placeholder="Enter a new task" />
+        <button id="addButton" onclick="addTodo()">Add</button>
+      </div>
+      <div id="counter"></div>
+      <div id="sort">
+        <select id="sortSelect">
+          <option value="none">None</option>
+          <option value="ask">Ask</option>
+          <option value="desc">Desc</option>
+        </select>
+      </div>
+      <ul class="list"></ul>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
